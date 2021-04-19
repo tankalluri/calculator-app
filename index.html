@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator Application</title>
+    <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      table { border-style: dotted; }
+      #form { background: aliceblue; margin-left: 30%; margin-right: 30%; padding: 9.25rem; bottom: 0; left: 0; right: 0; display: flex; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      h1 { margin-left: 43%; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
+  </head>
+  <body>
+  <h1>Calculator</h1>
+    <form name="calculator" id="form" action="">
+      <table>
+        <tr>
+          <td><input type="button" name="one" value="1" onclick="calculator.input.value += '1'"></td>
+          <td><input type="button" name="two" value="2" onclick="calculator.input.value += '2'"></td>
+          <td><input type="button" name="three" value="3" onclick="calculator.input.value += '3'"></td>
+          <td><input type="button" class="operator" name="plus" value="+" onclick="calculator.input.value += '+'"></td>
+        </tr>
+        <tr>
+          <td><input type="button" name="four" value="4" onclick="calculator.display.value += '4'"></td>
+          <td><input type="button" name="five" value="5" onclick="calculator.input.value += '5'"></td>
+          <td><input type="button" name="six" value="6" onclick="calculator.input.value += '6'"></td>
+          <td><input type="button" class="operator" name="minus" value="-" onclick="calculator.input.value += '-'"></td>
+        </tr>
+        <tr>
+          <td><input type="button" name="seven" value="7" onclick="calculator.input.value += '7'"></td>
+          <td><input type="button" name="eight" value="8" onclick="calculator.input.value += '8'"></td>
+          <td><input type="button" name="nine" value="9" onclick="calculator.input.value += '9'"></td>
+          <td><input type="button" class="operator" name="times" value="x" onclick="calculator.input.value += '*'"></td>
+        </tr>
+        <tr>
+          <td><input type="button" id="clear" name="clear" value="c" onclick="calculator.input.value = ''"></td>
+          <td><input type="button" name="zero" value="0" onclick="calculator.input.value += '0'"></td>
+          <td><input type="button" name="doit" value="=" onclick="calculator.input.value = eval(calculator.input.value)"></td>
+          <td><input type="button" class="operator" name="div" value="/" onclick="calculator.input.value += '/'"></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <input  type="text" name="display" id="input" autocomplete="off" disabled/><button>Send</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+    <ul id="messages"></ul>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      var socket = io();
+
+      var messages = document.getElementById('messages');
+      var form = document.getElementById('form');
+      var input = document.getElementById('input');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      });
+
+      socket.on('chat message', function(msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+  </body>
+</html>
