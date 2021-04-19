@@ -41,7 +41,7 @@
         <tr>
           <td><input type="button" id="clear" name="clear" value="c" onclick="calculator.input.value = ''"></td>
           <td><input type="button" name="zero" value="0" onclick="calculator.input.value += '0'"></td>
-          <td><input type="button" name="doit" value="=" onclick="calculator.input.value = eval(calculator.input.value)"></td>
+          <td><input type="button" name="doit" value="=" onclick="calculator.input.value = calculator.input.value + '=' + eval(calculator.input.value)"></td>
           <td><input type="button" class="operator" name="div" value="/" onclick="calculator.input.value += '/'"></td>
         </tr>
         <tr>
